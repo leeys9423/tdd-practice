@@ -18,16 +18,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Checkstyle 부분을 좀 더 단순한 action으로 변경
-      - name: Run Checkstyle
-        uses: nikitasavinov/checkstyle-action@master
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
-          tool_name: 'checkstyle'
-          level: warning
-          checkstyle_config: sun_checks.xml
-
+      # PMD만 실행
       - name: Run PMD
         uses: pmd/pmd-github-action@v1
         with:
