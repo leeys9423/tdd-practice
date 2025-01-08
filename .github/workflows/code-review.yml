@@ -18,20 +18,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # sun_checks.xml 사용 (더 안정적인 설정)
-      - name: Download Checkstyle Config
-        run: |
-          mkdir -p config
-          wget https://raw.githubusercontent.com/checkstyle/checkstyle/master/src/main/resources/sun_checks.xml -O config/checkstyle.xml
-
+      # Checkstyle 부분을 좀 더 단순한 action으로 변경
       - name: Run Checkstyle
-        uses: dbelyaev/action-checkstyle@v0.9.5
+        uses: nikitasavinov/checkstyle-action@master
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          checkstyle_config: config/checkstyle.xml
-          level: warning       # 추가: warning 레벨로 설정
-          filter_mode: nofilter # 추가: 모든 결과 표시
+          tool_name: 'checkstyle'
+          level: warning
+          checkstyle_config: sun_checks.xml
 
       - name: Run PMD
         uses: pmd/pmd-github-action@v1
