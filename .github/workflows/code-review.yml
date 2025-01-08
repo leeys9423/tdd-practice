@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ main ]
     paths:
-      - '**.java'  # 모든 Java 파일 감지
+      - '**.java'
 
 jobs:
   code-review:
@@ -18,10 +18,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # sun_checks.xml 사용 (더 안정적인 설정)
       - name: Download Checkstyle Config
         run: |
           mkdir -p config
-          wget https://raw.githubusercontent.com/checkstyle/checkstyle/master/src/main/resources/google_checks.xml -O config/checkstyle.xml
+          wget https://raw.githubusercontent.com/checkstyle/checkstyle/master/src/main/resources/sun_checks.xml -O config/checkstyle.xml
 
       - name: Run Checkstyle
         uses: dbelyaev/action-checkstyle@v0.9.5
@@ -29,6 +30,8 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           checkstyle_config: config/checkstyle.xml
+          level: warning       # 추가: warning 레벨로 설정
+          filter_mode: nofilter # 추가: 모든 결과 표시
 
       - name: Run PMD
         uses: pmd/pmd-github-action@v1
